@@ -12,7 +12,7 @@
 <h2 align="center">AI-Powered Fitness & Nutrition App with Intelligent Agents</h2>
 
 <p align="center">
-  <b>Harness the power of AI agents, prompt engineering, and intelligent automation for personalized workouts, adaptive nutrition, and data-driven progress tracking — all in one beautiful app.</b>
+  <b>Experience the next generation of fitness and nutrition with advanced AI agents, cutting-edge prompt engineering, and intelligent automation. Our app delivers hyper-personalized workout routines and adaptive meal plans, dynamically tailored to your unique goals, preferences, and feedback—all powered by state-of-the-art artificial intelligence.</b>
 </p>
 
 ---
@@ -32,13 +32,11 @@
 
 ## 🖼️ Screenshots
 
-> **Tip:** Add your app screenshots below for maximum impact! Replace the URLs with your own images (local or hosted).
-
 <p align="center">
-  <img src="https://placehold.co/200x400?text=Home+Screen" width="200" alt="Home Screen" />
-  <img src="https://placehold.co/200x400?text=Workout+Screen" width="200" alt="Workout Screen" />
-  <img src="https://placehold.co/200x400?text=Nutrition+Screen" width="200" alt="Nutrition Screen" />
-  <img src="https://placehold.co/200x400?text=Progress+Screen" width="200" alt="Progress Screen" />
+  <img src="SCREENSHOTS/home.png" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/workout.png" width="200" alt="Workout Screen" />
+  <img src="SCREENSHOTS/nutrition.png" width="200" alt="Nutrition Screen" />
+  <img src="SCREENSHOTS/progress.png" width="200" alt="Progress Screen" />
 </p>
 
 ---
