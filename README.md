@@ -33,10 +33,18 @@
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="SCREENSHOTS/home.png" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/workout.png" width="200" alt="Workout Screen" />
-  <img src="SCREENSHOTS/nutrition.png" width="200" alt="Nutrition Screen" />
-  <img src="SCREENSHOTS/progress.png" width="200" alt="Progress Screen" />
+  <img src="SCREENSHOTS/1.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/2.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/3.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/4.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/5.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/6.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/7.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/8.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/9.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/10.jpeg" width="200" alt="Home Screen" />
+  <img src="SCREENSHOTS/11.jpeg" width="200" alt="Home Screen" />
+  
 </p>
 
 ---
