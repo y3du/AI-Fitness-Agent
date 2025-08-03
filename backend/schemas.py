@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal, Optional, Union, List
+from datetime import date
 
 class GymStrengthSchema(BaseModel):
     bench_press_max: float
@@ -76,3 +77,42 @@ class FeedbackResponse(BaseModel):
 class NextWorkoutRequest(BaseModel):
     user_id: int
     target_day: str
+
+
+# Nutrition Schemas
+class FoodSchema(BaseModel):
+    name: str
+    quantity: str
+
+class MealSchema(BaseModel):
+    meal_id: int
+    name: str
+    meal_type: Literal["breakfast", "lunch", "dinner", "snack"]
+    foods: List[FoodSchema]
+    calories: float
+    protein_g: float
+    carbs_g: float
+    fat_g: float
+    dietary_tags: Optional[List[str]] = []
+
+class DailyNutritionPlanSchema(BaseModel):
+    day: str
+    meals: List[MealSchema]
+
+class MealFeedbackSchema(BaseModel):
+    meal_id: int
+    satisfaction: Literal[1, 2, 3, 4, 5]
+    notes: Optional[str] = None
+
+class DailyNutritionFeedbackSchema(BaseModel):
+    date: date
+    feedback: List[MealFeedbackSchema]
+
+class UserDietaryPreferencesSchema(BaseModel):
+    allergies: Optional[List[str]] = []
+    is_vegan: bool = False
+    is_vegetarian: bool = False
+    other_restrictions: Optional[str] = None
+
+class UserDietaryPreferencesResponse(BaseModel):
+    message: str

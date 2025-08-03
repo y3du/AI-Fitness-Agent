@@ -57,6 +57,14 @@ export const getOrCreateWorkout = async (userId) => {
   return response;
 };
 
+export const getWeeklyWorkout = (userId) => apiRequest(`/workouts/weekly/${userId}`);
+
+export const getNutritionPlan = (userId) => apiRequest('/nutrition/plan/', 'POST', { user_id: userId });
+
+export const saveDietaryPreferences = (userId, preferences) => apiRequest(`/users/${userId}/dietary-preferences`, 'POST', preferences);
+
+export const getDietaryPreferences = (userId) => apiRequest(`/users/${userId}/dietary-preferences`);
+
 export const submitFeedback = async (userId, feedbackData) => {
   const response = await apiRequest('/workouts/feedback/', 'POST', feedbackData, userId ? { user_id: userId } : null);
   console.log('submitFeedback response:', response);

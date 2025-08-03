@@ -9,6 +9,7 @@ const HomeScreen = ({ navigation }) => {
   const [userName, setUserName] = useState('User');
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -32,13 +33,15 @@ const HomeScreen = ({ navigation }) => {
             }
 
             // Load or create workout plan
-            const userId = await AsyncStorage.getItem('user_id');
-            if (!userId || isNaN(parseInt(userId))) {
+            const storedUserId = await AsyncStorage.getItem('user_id');
+            if (!storedUserId || isNaN(parseInt(storedUserId))) {
               throw new Error('Invalid or missing user ID. Please complete onboarding.');
             }
-            console.log('Fetching workout for user_id:', userId);
+            const parsedUserId = parseInt(storedUserId);
+            setUserId(parsedUserId);
+            console.log('Fetching workout for user_id:', parsedUserId);
 
-            const response = await getOrCreateWorkout(parseInt(userId));
+            const response = await getOrCreateWorkout(parsedUserId);
             // Backend returns a list of workouts; select today's workout
             const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const today = daysOfWeek[new Date().getDay()];
@@ -106,6 +109,19 @@ const HomeScreen = ({ navigation }) => {
             >
               <Ionicons name="stats-chart" size={24} color="white" />
               <Text style={styles.quickActionText}>View Progress</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.quickAction, { backgroundColor: '#50C878' }]}
+              onPress={() => {
+                if (userId) {
+                  navigation.navigate('Nutrition', { userId });
+                } else {
+                  Alert.alert('Error', 'Could not get user ID.');
+                }
+              }}
+            >
+              <Ionicons name="leaf" size={24} color="white" />
+              <Text style={styles.quickActionText}>Track Nutrition</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -175,7 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   quickAction: {
-    flex: 0.48,
+    flex: 0.31,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',

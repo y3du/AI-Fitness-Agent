@@ -1,7 +1,9 @@
 from models import UserFitnessInput, DailyWorkout, DailyWorkoutFeedback, GymStrength, HomeStrength, Exercise, ExerciseFeedback
 from psycopg2.extras import Json
+import json
+import psycopg2.extras
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 async def save_user(user_input: UserFitnessInput, db) -> int:
     try:
@@ -157,7 +159,7 @@ async def load_feedback(user_id: int, target_day: str, db) -> DailyWorkoutFeedba
     except Exception as e:
         raise Exception(f"Failed to load feedback: {e}")
 
-async def save_feedback(workout_id: int, feedback: DailyWorkoutFeedback, db):
+async def save_feedback(user_id: int, workout_id: int, feedback: DailyWorkoutFeedback, db):
     if not feedback.feedback:
         return
     try:
@@ -166,12 +168,13 @@ async def save_feedback(workout_id: int, feedback: DailyWorkoutFeedback, db):
             cursor.execute(
                 """
                 INSERT INTO Feedback (
-                    workout_id, exercise_name, sets_completed, reps_completed, 
+                    user_id, workout_id, exercise_name, sets_completed, reps_completed, 
                     difficulty, notes, soreness_level
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
+                    user_id,
                     workout_id,
                     fb.name,
                     fb.sets_completed,
@@ -185,6 +188,87 @@ async def save_feedback(workout_id: int, feedback: DailyWorkoutFeedback, db):
     except Exception as e:
         db.rollback()
         raise Exception(f"Failed to save feedback to database: {e}")
+
+async def save_or_update_user_dietary_preferences(user_id: int, preferences: dict, db):
+    try:
+        cursor = db.cursor()
+        cursor.execute(
+            """
+            INSERT INTO UserDietaryPreferences (user_id, allergies, is_vegan, is_vegetarian, other_restrictions)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (user_id) DO UPDATE SET
+                allergies = EXCLUDED.allergies,
+                is_vegan = EXCLUDED.is_vegan,
+                is_vegetarian = EXCLUDED.is_vegetarian,
+                other_restrictions = EXCLUDED.other_restrictions;
+            """,
+            (user_id, preferences.get('allergies', []), preferences.get('is_vegan', False), preferences.get('is_vegetarian', False), preferences.get('other_restrictions'))
+        )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise Exception(f"Failed to save dietary preferences: {e}")
+
+async def load_user_dietary_preferences(user_id: int, db):
+    try:
+        cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT * FROM UserDietaryPreferences WHERE user_id = %s", (user_id,))
+        record = cursor.fetchone()
+        return dict(record) if record else None
+    except Exception as e:
+        raise Exception(f"Failed to load dietary preferences: {e}")
+
+async def save_nutrition_plan(user_id: int, plan: List[dict], db):
+    try:
+        cursor = db.cursor()
+        # First, delete any existing plan for this user to avoid stale data.
+        cursor.execute("DELETE FROM NutritionPlans WHERE user_id = %s", (user_id,))
+        
+        # Now, insert the new plan
+        for daily_plan in plan:
+            day = daily_plan['day']
+            meals_json = json.dumps(daily_plan['meals'])
+            cursor.execute(
+                """
+                INSERT INTO NutritionPlans (user_id, day, meals)
+                VALUES (%s, %s, %s)
+                RETURNING plan_id;
+                """,
+                (user_id, day, meals_json)
+            )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise Exception(f"Failed to save nutrition plan: {e}")
+
+async def load_nutrition_plan(user_id: int, db):
+    try:
+        cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        # Load the most recent plan for the last 7 days
+        cursor.execute(
+            """
+            SELECT day, meals 
+            FROM NutritionPlans 
+            WHERE user_id = %s AND created_at >= NOW() - INTERVAL '7 days'
+            ORDER BY created_at DESC, day ASC;
+            """,
+            (user_id,)
+        )
+        records = cursor.fetchall()
+        # Assuming one plan per week, we group by the creation date implicitly by ordering
+        if not records:
+            return None
+        
+        # Reconstruct the weekly plan from daily rows
+        weekly_plan = []
+        # This logic assumes the latest 7 day-rows form a single plan.
+        # A more robust solution might involve a batch_id on the NutritionPlans table.
+        for record in records[:7]: # Limit to 7 days
+            weekly_plan.append(dict(record))
+        return weekly_plan
+
+    except Exception as e:
+        raise Exception(f"Failed to load nutrition plan: {e}")
 
 async def save_conversation(user_id: Optional[int], action: str, data: dict, db, workout_id: Optional[int] = None):
     try:

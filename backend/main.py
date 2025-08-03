@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_db_connection
-from db_ops import save_user, load_user, save_workout, load_previous_workout, load_feedback, save_feedback, save_conversation
-from schemas import UserFitnessInputSchema, UserResponse, WorkoutResponse, DailyWorkoutFeedbackSchema, FeedbackResponse, NextWorkoutRequest, DailyWorkoutSchema
+from db_ops import save_user, load_user, save_workout, load_previous_workout, load_feedback, save_feedback, save_conversation, save_nutrition_plan, load_nutrition_plan, save_or_update_user_dietary_preferences, load_user_dietary_preferences
+from schemas import UserFitnessInputSchema, UserResponse, WorkoutResponse, DailyWorkoutFeedbackSchema, FeedbackResponse, NextWorkoutRequest, DailyWorkoutSchema, DailyNutritionPlanSchema, UserDietaryPreferencesSchema, UserDietaryPreferencesResponse
 from workout_generator import generate_workout, apply_slight_progression, needs_modification
+from nutrition_generator import generate_nutrition_plan
 from typing import List
 from datetime import datetime, timedelta
 import logging
@@ -17,7 +18,7 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://192.168.1.3:8000", "*"], # Allow mobile device
+    allow_origins=["http://localhost:3000", "http://192.168.1.3:8000","http://192.168.12.1:8000" ,"*"], # Allow mobile device
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -169,7 +170,7 @@ async def submit_workout_feedback(user_id: int, feedback: DailyWorkoutFeedbackSc
             raise ValueError(f"No workout found for {feedback.day} in the current week for user {user_id}")
         workout_id = workout_data[0]
 
-        await save_feedback(workout_id, feedback, db)
+        await save_feedback(user_id, workout_id, feedback, db)
         await save_conversation(user_id, f"Submitted feedback for {feedback.day}", feedback.dict(), db, workout_id=workout_id)
         logger.info(f"Feedback submitted for user_id: {user_id}, workout_id: {workout_id}")
         return {"message": "Feedback submitted successfully"}
@@ -228,6 +229,65 @@ async def generate_next_workout(request: NextWorkoutRequest, db=Depends(get_db_c
         raise HTTPException(status_code=500, detail=f"Failed to generate next workout: {str(e)}")
     finally:
         cursor.close()
+
+@app.post("/users/{user_id}/dietary-preferences", response_model=UserDietaryPreferencesResponse)
+async def create_or_update_dietary_preferences(user_id: int, preferences: UserDietaryPreferencesSchema, db=Depends(get_db_connection)):
+    try:
+        await save_or_update_user_dietary_preferences(user_id, preferences.dict(), db)
+        logger.info(f"Saved dietary preferences for user_id: {user_id}")
+        return {"message": "Dietary preferences saved successfully"}
+    except Exception as e:
+        logger.error(f"Failed to save dietary preferences for user_id {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save dietary preferences: {str(e)}")
+
+@app.get("/users/{user_id}/dietary-preferences", response_model=UserDietaryPreferencesSchema)
+async def get_dietary_preferences(user_id: int, db=Depends(get_db_connection)):
+    try:
+        preferences = await load_user_dietary_preferences(user_id, db)
+        if not preferences:
+            raise HTTPException(status_code=404, detail="Dietary preferences not found for this user.")
+        return preferences
+    except Exception as e:
+        logger.error(f"Failed to load dietary preferences for user_id {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to load dietary preferences: {str(e)}")
+
+@app.post("/nutrition/plan/", response_model=List[dict])
+async def get_or_generate_nutrition_plan(request: dict, db=Depends(get_db_connection)):
+    try:
+        user_id = request.get('user_id')
+        if not isinstance(user_id, int):
+            raise ValueError(f"Invalid user_id: {user_id}")
+        logger.info(f"Fetching or generating nutrition plan for user_id: {user_id}")
+
+        # Attempt to load an existing plan from the last 7 days
+        existing_plan = await load_nutrition_plan(user_id, db)
+        if existing_plan:
+            logger.info(f"Found existing nutrition plan for user_id: {user_id}. Returning it.")
+            return existing_plan
+
+        # If no recent plan, generate a new one
+        logger.info(f"No recent nutrition plan found for user_id: {user_id}. Generating a new one.")
+        user_input = await load_user(user_id, db)
+        if not user_input:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+        logger.info(f"Generating new nutrition plan for user_id: {user_id}")
+        new_plan = await generate_nutrition_plan(user_id, user_input, db)
+        
+        # Save the new plan
+        await save_nutrition_plan(user_id, new_plan, db)
+        
+        await save_conversation(user_id, "Generated new nutrition plan", {"status": "success"}, db)
+        logger.info(f"Successfully generated and saved new nutrition plan for user_id: {user_id}")
+
+        return new_plan
+    except ValueError as e:
+        logger.error(f"ValueError in nutrition plan generation for user_id {user_id}: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to get or generate nutrition plan for user_id {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to process nutrition plan request: {str(e)}")
+
 
 if __name__ == "__main__":
     import uvicorn

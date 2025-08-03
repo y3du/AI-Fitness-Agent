@@ -27,6 +27,8 @@ import ProgressScreen from '../screens/ProgressScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import WorkoutDetailsScreen from '../screens/WorkoutDetailsScreen';
 import ExerciseScreen from '../screens/ExerciseScreen';
+import NutritionScreen from '../screens/NutritionScreen';
+import DietaryPreferencesScreen from '../screens/DietaryPreferencesScreen';
 
 // Debug component import
 if (!HomeScreen) {
@@ -52,6 +54,15 @@ function HomeStack() {
       <Stack.Screen 
         name="Exercise" 
         component={ExerciseScreen} 
+      />
+      <Stack.Screen 
+        name="Nutrition"
+        component={NutritionScreen} 
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="DietaryPreferences"
+        component={DietaryPreferencesScreen} 
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
