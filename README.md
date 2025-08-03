@@ -1,4 +1,4 @@
-# 🚀 AI Fitness App
+# 🚀 AI Fitness App: Your Personal AI Agent for Health & Wellness
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Expo](https://img.shields.io/badge/Expo-53.0.10-blue)](https://expo.dev/)
@@ -7,24 +7,26 @@
 
 ---
 
-<p align="center">
-  <img src="frontend/assets/icon.png" alt="AI Fitness App Logo" width="120" />
-</p>
 
-<h2 align="center">AI-Powered Fitness & Nutrition App</h2>
+
+<h2 align="center">AI-Powered Fitness & Nutrition App with Intelligent Agents</h2>
 
 <p align="center">
-  <b>Personalized workouts, smart nutrition plans, and progress tracking — all in one beautiful app.</b>
+  <b>Harness the power of AI agents, prompt engineering, and intelligent automation for personalized workouts, adaptive nutrition, and data-driven progress tracking — all in one beautiful app.</b>
 </p>
 
 ---
 
 ## ✨ Features
 
-- 🏋️‍♂️ <b>Personalized Workouts:</b> AI-generated weekly routines based on your goals, experience, and equipment.
-- 🥗 <b>Smart Nutrition:</b> Custom meal plans tailored to your dietary preferences and feedback.
-- 👤 <b>Seamless Onboarding:</b> Easy setup, persistent login, and profile management.
-- 🔄 <b>Feedback Loops:</b> Rate workouts and meals to improve future recommendations.
+- 🤖 <b>AI Agent-Driven Workouts:</b> Advanced AI agents generate weekly routines tailored to your goals, experience, and available equipment using state-of-the-art prompt engineering.
+- 🥗 <b>Smart Nutrition Planning:</b> Intelligent meal plans adapt to your dietary preferences, restrictions, and real-time feedback, powered by AI-driven prompt design.
+- 👤 <b>Seamless Onboarding:</b> Effortless setup with persistent login, profile management, and dynamic user modeling.
+- 🔄 <b>Continuous Feedback Loops:</b> Rate workouts and meals to enable the AI agent to refine future recommendations and optimize your fitness journey.
+- 🏆 <b>Goal-Oriented Motivation:</b> Set, track, and celebrate milestones with badges, reminders, and personalized encouragement from your AI agent.
+- 🌐 <b>Cross-Platform Experience:</b> Enjoy a seamless experience on both iOS and Android via Expo.
+- 🔒 <b>Secure & Private:</b> All user data is encrypted and processed securely. Your privacy is our priority.
+- 🧠 <b>Prompt Engineering at Core:</b> Every recommendation is crafted using advanced prompt engineering techniques for optimal personalization.
 
 ---
 
@@ -39,17 +41,6 @@
   <img src="https://placehold.co/200x400?text=Progress+Screen" width="200" alt="Progress Screen" />
 </p>
 
-<!--
-Example for adding your own screenshots:
-
-<p align="center">
-  <img src="screenshots/home.png" width="200" alt="Home Screen" />
-  <img src="screenshots/workout.png" width="200" alt="Workout Screen" />
-  <img src="screenshots/nutrition.png" width="200" alt="Nutrition Screen" />
-  <img src="screenshots/progress.png" width="200" alt="Progress Screen" />
-</p>
--->
-
 ---
 
 ## 🏗️ Project Structure
@@ -60,8 +51,8 @@ fullstack-project/
     main.py                # FastAPI app and API endpoints
     db.py                  # PostgreSQL connection pool
     db_ops.py              # Database operations
-    workout_generator.py   # AI workout logic
-    nutrition_generator.py # AI nutrition logic
+    workout_generator.py   # AI agent for workout logic (prompt engineering)
+    nutrition_generator.py # AI agent for nutrition logic (prompt engineering)
     models.py, schemas.py  # Pydantic models and schemas
   frontend/
     src/
@@ -78,7 +69,9 @@ fullstack-project/
 
 - **Frontend:** React Native (Expo), React Navigation, AsyncStorage, Chart Kit, Vector Icons
 - **Backend:** FastAPI, PostgreSQL, psycopg2, dotenv
+- **AI/ML:** Custom AI agents leveraging prompt engineering for dynamic workout and nutrition generation
 - **API:** RESTful endpoints for user, workout, nutrition, and feedback management
+- **Automation:** Intelligent feedback loops and agent-based adaptation
 
 ---
 
@@ -134,6 +127,29 @@ fullstack-project/
 | `/nutrition/plan/`                            | POST   | Generate or fetch nutrition plan   |
 | `/users/{user_id}/dietary-preferences`        | POST   | Set dietary preferences            |
 | `/users/{user_id}/dietary-preferences`        | GET    | Get dietary preferences            |
+
+---
+
+## 🧠 How It Works
+
+1. **User Onboarding:** The AI agent collects user goals, experience, body metrics, and dietary preferences using dynamic forms and prompt engineering.
+2. **AI Agent-Driven Generation:** Custom AI agents use advanced prompt engineering to generate weekly workout routines and adaptive meal plans, ensuring every recommendation is uniquely tailored.
+3. **Feedback Loops:** User feedback is processed by the AI agent, which refines future plans and recommendations, learning and adapting over time.
+4. **Progress Analytics:** The app visualizes user progress with interactive charts, trend analysis, and actionable insights, all powered by intelligent automation.
+5. **Continuous Personalization:** The AI agent leverages prompt engineering to continuously improve and personalize the user experience.
+
+---
+
+## 🗺️ Roadmap
+
+- [x] Core AI agent for workout and nutrition generation
+- [x] Prompt engineering for personalized recommendations
+- [x] Feedback-driven adaptation and learning
+- [ ] Integration with wearable devices (e.g., Fitbit, Apple Watch)
+- [ ] Social features: share progress, join challenges
+- [ ] Voice assistant integration for hands-free interaction
+- [ ] Advanced analytics and predictive insights
+- [ ] In-app AI chat agent for real-time fitness and nutrition Q&A
 
 ---
 
