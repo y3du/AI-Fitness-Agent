@@ -33,18 +33,17 @@
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="SCREENSHOTS/1.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/2.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/3.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/4.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/5.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/6.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/7.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/8.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/9.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/10.jpeg" width="200" alt="Home Screen" />
-  <img src="SCREENSHOTS/11.jpeg" width="200" alt="Home Screen" />
-  
+  <img src="Screenshots/1.jpeg" width="200" alt="Screenshot 1" />
+  <img src="Screenshots/2.jpeg" width="200" alt="Screenshot 2" />
+  <img src="Screenshots/3.jpeg" width="200" alt="Screenshot 3" />
+  <img src="Screenshots/4.jpeg" width="200" alt="Screenshot 4" />
+  <img src="Screenshots/5.jpeg" width="200" alt="Screenshot 5" />
+  <img src="Screenshots/6.jpeg" width="200" alt="Screenshot 6" />
+  <img src="Screenshots/7.jpeg" width="200" alt="Screenshot 7" />
+  <img src="Screenshots/8.jpeg" width="200" alt="Screenshot 8" />
+  <img src="Screenshots/9.jpeg" width="200" alt="Screenshot 9" />
+  <img src="Screenshots/10.jpeg" width="200" alt="Screenshot 10" />
+  <img src="Screenshots/11.jpeg" width="200" alt="Screenshot 11" />
 </p>
 
 ---
